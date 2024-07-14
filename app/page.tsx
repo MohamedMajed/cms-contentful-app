@@ -37,39 +37,39 @@ function Intro() {
 }
 
 function HeroPost({
-  title,
-  coverImage,
-  date,
-  excerpt,
-  author,
+  name,
   slug,
+  thumbnail,
+  description,
+  price,
+  quality,
 }: {
-  title: string;
-  coverImage: any;
-  date: string;
-  excerpt: string;
-  author: any;
+  name: string;
   slug: string;
+  thumbnail: any;
+  description: string;
+  price: number;
+  quality: number;
 }) {
   return (
     <section>
       <div className="mb-8 md:mb-16">
-        <CoverImage title={title} slug={slug} url={coverImage.url} />
+        <CoverImage title={name} slug={slug} url={thumbnail.url} />
       </div>
       <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">
         <div>
           <h3 className="mb-4 text-4xl lg:text-6xl leading-tight">
             <Link href={`/posts/${slug}`} className="hover:underline">
-              {title}
+              {name}
             </Link>
           </h3>
-          <div className="mb-4 md:mb-0 text-lg">
+          {/* <div className="mb-4 md:mb-0 text-lg">
             <Date dateString={date} />
-          </div>
+          </div> */}
         </div>
         <div>
-          <p className="text-lg leading-relaxed mb-4">{excerpt}</p>
-          {author && <Avatar name={author.name} picture={author.picture} />}
+          {/* <p className="text-lg leading-relaxed mb-4">{excerpt}</p> */}
+          {name && <Avatar name={name} thumbnail={thumbnail.url} />}
         </div>
       </div>
     </section>
@@ -87,12 +87,12 @@ export default async function Page() {
       <Intro />
       {heroPost && (
         <HeroPost
-          title={heroPost.title}
-          coverImage={heroPost.coverImage}
-          date={heroPost.date}
-          author={heroPost.author}
+          name={heroPost.name}
+          thumbnail={heroPost.thumbnail}
           slug={heroPost.slug}
-          excerpt={heroPost.excerpt}
+          description={heroPost.description}
+          price={heroPost.price}
+          quality={heroPost.quality}
         />
       )}
       <MoreStories morePosts={morePosts} />

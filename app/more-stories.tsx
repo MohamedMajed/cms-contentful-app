@@ -4,35 +4,35 @@ import DateComponent from "./date";
 import CoverImage from "./cover-image";
 
 function PostPreview({
-  title,
-  coverImage,
-  date,
-  excerpt,
-  author,
+  name,
   slug,
+  thumbnail,
+  description,
+  price,
+  quality,
 }: {
-  title: string;
-  coverImage: any;
-  date: string;
-  excerpt: string;
-  author: any;
+  name: string;
   slug: string;
+  thumbnail: any;
+  description: string;
+  price: number;
+  quality: number;
 }) {
   return (
     <div>
       <div className="mb-5">
-        <CoverImage title={title} slug={slug} url={coverImage.url} />
+        <CoverImage title={name} slug={slug} url={thumbnail.url} />
       </div>
       <h3 className="text-3xl mb-3 leading-snug">
         <Link href={`/posts/${slug}`} className="hover:underline">
-          {title}
+          {name}
         </Link>
       </h3>
       <div className="text-lg mb-4">
-        <DateComponent dateString={date} />
+        {/* <DateComponent dateString={date} /> */}
       </div>
-      <p className="text-lg leading-relaxed mb-4">{excerpt}</p>
-      {author && <Avatar name={author.name} picture={author.picture} />}
+      <p className="text-lg leading-relaxed mb-4"></p>
+      {name && <Avatar name={name} thumbnail={thumbnail.picture} />}
     </div>
   );
 }
@@ -47,12 +47,12 @@ export default function MoreStories({ morePosts }: { morePosts: any[] }) {
         {morePosts.map((post) => (
           <PostPreview
             key={post.slug}
-            title={post.title}
-            coverImage={post.coverImage}
-            date={post.date}
-            author={post.author}
+            name={post.name}
+            thumbnail={post.thumbnail}
             slug={post.slug}
-            excerpt={post.excerpt}
+            description={post.description}
+            price={post.price}
+            quality={post.quality}
           />
         ))}
       </div>

@@ -1,31 +1,12 @@
 const POST_GRAPHQL_FIELDS = `
-  slug
-  title
-  coverImage {
-    url
-  }
-  date
-  author {
-    name
-    picture {
-      url
-    }
-  }
-  excerpt
-  content {
-    json
-    links {
-      assets {
-        block {
-          sys {
-            id
-          }
-          url
-          description
-        }
+      name
+      slug
+      thumbnail{
+        url
       }
-    }
-  }
+      description
+      price
+      quantity
 `;
 
 async function fetchGraphQL(query: string, preview = false): Promise<any> {
@@ -37,7 +18,7 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${
           preview
-            ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
+           ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
             : process.env.CONTENTFUL_ACCESS_TOKEN
         }`,
       },
@@ -72,8 +53,8 @@ export async function getPreviewPostBySlug(slug: string | null): Promise<any> {
 export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_exists: true }, order: date_DESC, preview: ${
-        isDraftMode ? "true" : "false"
+      postCollection(where: { slug_exists: true }, order: name_DESC, preview: ${
+        isDraftMode? "true" : "false"
       }) {
         items {
           ${POST_GRAPHQL_FIELDS}
@@ -82,6 +63,7 @@ export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
     }`,
     isDraftMode,
   );
+  console.log(entries);
   return extractPostEntries(entries);
 }
 
@@ -92,7 +74,7 @@ export async function getPostAndMorePosts(
   const entry = await fetchGraphQL(
     `query {
       postCollection(where: { slug: "${slug}" }, preview: ${
-        preview ? "true" : "false"
+        preview? "true" : "false"
       }, limit: 1) {
         items {
           ${POST_GRAPHQL_FIELDS}
@@ -104,7 +86,7 @@ export async function getPostAndMorePosts(
   const entries = await fetchGraphQL(
     `query {
       postCollection(where: { slug_not_in: "${slug}" }, order: date_DESC, preview: ${
-        preview ? "true" : "false"
+        preview? "true" : "false"
       }, limit: 2) {
         items {
           ${POST_GRAPHQL_FIELDS}
