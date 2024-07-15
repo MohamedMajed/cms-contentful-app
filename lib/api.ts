@@ -1,12 +1,35 @@
-const POST_GRAPHQL_FIELDS = `
-      name
-      slug
-      thumbnail{
-        url
+const CATEGORY_GRAPHQL_FIELDS = `
+  title
+  slug
+  description
+  image {
+    url
+  }
+  postsCollection(limit: 10) {
+    items {
+      ... on Post {
+        name
+        slug
+        thumbnail {
+          url
+        }
+        description
+        price
+        quantity
       }
-      description
-      price
-      quantity
+    }
+  }
+`;
+
+const POST_GRAPHQL_FIELDS = `
+  name
+  slug
+  thumbnail {
+    url
+  }
+  description
+  price
+  quantity
 `;
 
 async function fetchGraphQL(query: string, preview = false): Promise<any> {
@@ -18,7 +41,7 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
         "Content-Type": "application/json",
         Authorization: `Bearer ${
           preview
-           ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
+            ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
             : process.env.CONTENTFUL_ACCESS_TOKEN
         }`,
       },
@@ -28,24 +51,90 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
   ).then((response) => response.json());
 }
 
+function extractCategory(fetchResponse: any): any {
+  console.log('blabla extractCategory')
+  console.log(fetchResponse?.data?.categoryCollection?.items?.[0])
+  return fetchResponse?.data?.categoryCollection?.items?.[0];
+}
+
+function extractCategories(fetchResponse: any): any[] {
+  return fetchResponse?.data?.categoryCollection?.items;
+}
+
 function extractPost(fetchResponse: any): any {
+  console.log('blabla extractPost')
+  console.log(fetchResponse?.data?.postCollection?.items?.[0])
   return fetchResponse?.data?.postCollection?.items?.[0];
 }
 
-function extractPostEntries(fetchResponse: any): any[] {
+function extractPosts(fetchResponse: any): any[] {
   return fetchResponse?.data?.postCollection?.items;
 }
 
-export async function getPreviewPostBySlug(slug: string | null): Promise<any> {
+export async function getCategory(slug: string | null): Promise<any> {
   const entry = await fetchGraphQL(
     `query {
-      postCollection(where: { slug: "${slug}" }, preview: true, limit: 1) {
+      categoryCollection(where: { slug: "${slug}" }, limit: 1) {
+        items {
+          ${CATEGORY_GRAPHQL_FIELDS}
+        }
+      }
+    }`,
+  );
+  return extractCategory(entry);
+}
+
+export async function getAllPostsInCategory(
+  categorySlug: string,
+  isEnabled: boolean,
+  options: { limit: number; page?: number } = { limit: 6 }
+) {
+  const category = await getCategory(categorySlug);
+  const postsQuery = `query {
+    postCollection(where: { categories: { elemMatch: { slug: "${categorySlug}" } } }, preview: ${isEnabled? "true" : "false"}, limit: ${options.limit}, skip: ${options.page? (options.page - 1) * options.limit : 0}) {
+      items {
+        ${POST_GRAPHQL_FIELDS}
+      }
+    }
+  }`;
+
+  const response = await fetchGraphQL(postsQuery, isEnabled);
+  console.log('blabla');
+  console.log(response);
+  const posts = extractPosts(response);
+
+  const pagination = {
+    hasNextPage: posts.length === options.limit,
+    nextPage: options.page ? options.page + 1 : 2,
+  };
+  console.log(posts.length)
+
+  return { posts, pagination };
+}
+
+export async function getAllCategories(): Promise<any[]> {
+  const entries = await fetchGraphQL(
+    `query {
+      categoryCollection(order: title_ASC) {
+        items {
+          ${CATEGORY_GRAPHQL_FIELDS}
+        }
+      }
+    }`,
+  );
+  return extractCategories(entries);
+}
+
+export async function getPostBySlug(slug: string | null, preview: boolean): Promise<any> {
+  const entry = await fetchGraphQL(
+    `query {
+      postCollection(where: { slug: "${slug}" }, preview: ${preview ? "true" : "false"}, limit: 1) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
       }
     }`,
-    true,
+    preview,
   );
   return extractPost(entry);
 }
@@ -53,9 +142,7 @@ export async function getPreviewPostBySlug(slug: string | null): Promise<any> {
 export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_exists: true }, order: name_DESC, preview: ${
-        isDraftMode? "true" : "false"
-      }) {
+      postCollection(where: { slug_exists: true }, order: name_DESC, preview: ${isDraftMode ? "true" : "false"}) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
@@ -63,19 +150,13 @@ export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
     }`,
     isDraftMode,
   );
-  console.log(entries);
-  return extractPostEntries(entries);
+  return extractPosts(entries);
 }
 
-export async function getPostAndMorePosts(
-  slug: string,
-  preview: boolean,
-): Promise<any> {
+export async function getPostAndMorePosts(slug: string, preview: boolean): Promise<any> {
   const entry = await fetchGraphQL(
     `query {
-      postCollection(where: { slug: "${slug}" }, preview: ${
-        preview? "true" : "false"
-      }, limit: 1) {
+      postCollection(where: { slug: "${slug}" }, preview: ${preview ? "true" : "false"}, limit: 1) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
@@ -85,9 +166,7 @@ export async function getPostAndMorePosts(
   );
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_not_in: "${slug}" }, order: date_DESC, preview: ${
-        preview? "true" : "false"
-      }, limit: 2) {
+      postCollection(where: { slug_not_in: "${slug}" }, order: date_DESC, preview: ${preview ? "true" : "false"}, limit: 2) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
@@ -97,6 +176,6 @@ export async function getPostAndMorePosts(
   );
   return {
     post: extractPost(entry),
-    morePosts: extractPostEntries(entries),
+    morePosts: extractPosts(entries),
   };
 }

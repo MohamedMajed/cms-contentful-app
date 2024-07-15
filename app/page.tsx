@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { draftMode } from "next/headers";
+// import Slider from "./components/slider";
+import ImageSlider from "./components/slider";
 
 import Date from "./date";
 import CoverImage from "./cover-image";
 import Avatar from "./avatar";
 import MoreStories from "./more-stories";
 
-import { getAllPosts } from "@/lib/api";
+import { getAllCategories } from "@/lib/api";
 import { CMS_NAME, CMS_URL } from "@/lib/constants";
+import Head from "next/head";
 
 function Intro() {
   return (
@@ -36,66 +39,77 @@ function Intro() {
   );
 }
 
-function HeroPost({
-  name,
-  slug,
-  thumbnail,
-  description,
-  price,
-  quality,
+function Header() {
+  return (
+    <header className="flex justify-between items-center py-4 bg-gray-100 shadow-md">
+      <nav className="flex items-center">
+        <ul className="flex items-center">
+          <li className="mr-6">
+            <Link href="/" className="text-gray-600 hover:text-gray-900 transition duration-300">Phones</Link>
+          </li>
+          <li className="mr-6">
+            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Clothes</Link>
+          </li>
+          <li className="mr-6">
+            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Deals</Link>
+          </li>
+          <li className="mr-6">
+            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Computers</Link>
+          </li>
+          <li className="mr-6">
+            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Fashion</Link>
+          </li>
+          
+        </ul>
+      </nav>
+    </header>
+  );
+}
+
+
+function TopCategories({
+  categories,
 }: {
-  name: string;
-  slug: string;
-  thumbnail: any;
-  description: string;
-  price: number;
-  quality: number;
+  categories: {
+    title: string;
+    slug: string;
+    image: any;
+  }[];
 }) {
   return (
-    <section>
-      <div className="mb-8 md:mb-16">
-        <CoverImage title={name} slug={slug} url={thumbnail.url} />
-      </div>
-      <div className="md:grid md:grid-cols-2 md:gap-x-16 lg:gap-x-8 mb-20 md:mb-28">
-        <div>
-          <h3 className="mb-4 text-4xl lg:text-6xl leading-tight">
-            <Link href={`/posts/${slug}`} className="hover:underline">
-              {name}
-            </Link>
-          </h3>
-          {/* <div className="mb-4 md:mb-0 text-lg">
-            <Date dateString={date} />
-          </div> */}
+    <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-20 pt-10">
+      {categories.slice(0, 6).map((category) => (
+        <div key={category.slug} className="relative">
+          <Link href={`/categories/${category.slug}`}>
+            <img
+              src={category.image.url}
+              alt={category.title}
+              className="w-full h-full object-cover rounded-lg"
+            />
+          </Link>
+          <div className="absolute bottom-0 left-0 p-4 text-lg font-bold text-white">
+            {category.title}
+          </div>
         </div>
-        <div>
-          {/* <p className="text-lg leading-relaxed mb-4">{excerpt}</p> */}
-          {name && <Avatar name={name} thumbnail={thumbnail.url} />}
-        </div>
-      </div>
+      ))}
     </section>
   );
 }
 
 export default async function Page() {
   const { isEnabled } = draftMode();
-  const allPosts = await getAllPosts(isEnabled);
-  const heroPost = allPosts[0];
-  const morePosts = allPosts.slice(1);
+  const allCategories = await getAllCategories();
+  const heroPost = allCategories[0];
+  const moreCategories = allCategories.slice(1);
+
+  const sliderImages = allCategories.map((category) => category.image);
 
   return (
     <div className="container mx-auto px-5">
-      <Intro />
-      {heroPost && (
-        <HeroPost
-          name={heroPost.name}
-          thumbnail={heroPost.thumbnail}
-          slug={heroPost.slug}
-          description={heroPost.description}
-          price={heroPost.price}
-          quality={heroPost.quality}
-        />
-      )}
-      <MoreStories morePosts={morePosts} />
+      <Header />
+      <ImageSlider allCategories={allCategories} />
+      <TopCategories categories={allCategories} />
+      <MoreStories moreCategories={moreCategories} />
     </div>
   );
 }
