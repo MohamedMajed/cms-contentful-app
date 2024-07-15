@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
@@ -7,9 +7,6 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
 
   // State to keep track of the current image index
   const [currentIndex, setCurrentIndex] = useState<number>(0);
-
-  // State to determine if the image is being hovered over
-  const [isHovered, setIsHovered] = useState<boolean>(false);
 
   // Function to show the previous slide
   const prevSlide = (): void => {
@@ -23,36 +20,20 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
 
   // useEffect hook to handle automatic slide transition
   useEffect(() => {
-    // Start interval for automatic slide change if not hovered
-    if (!isHovered) {
-      const interval = setInterval(() => {
-        nextSlide();
-      }, 2000);
+    // Start interval for automatic slide change
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 2000);
 
-      // Cleanup the interval on component unmount
-      return () => {
-        clearInterval(interval);
-      };
-    }
-  }, [isHovered]);
-
-  // Handle mouse over event
-  const handleMouseOver = (): void => {
-    setIsHovered(true);
-  };
-
-  // Handle mouse leave event
-  const handleMouseLeave = (): void => {
-    setIsHovered(false);
-  };
+    // Cleanup the interval on component unmount
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
 
   return (
     <div className="relative w-full mx-auto mt-4">
-      <div
-        className="relative h-[460px] mx-12 group hover:-translate-y-2"
-        onMouseOver={handleMouseOver}
-        onMouseLeave={handleMouseLeave}
-      >
+      <div className="relative h-[460px] mx-12">
         <Image
           loader={({ src, width, quality }) => `${src}?w=${width}&q=${quality}`}
           src={images[currentIndex]}
@@ -69,7 +50,7 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
             key={index}
             className={`h-1 w-10 mx-1 ${
               index === currentIndex
-               ? "bg-[#beff46] rounded-xl"
+                ? "bg-[#beff46] rounded-xl"
                 : "bg-gray-300 rounded-xl"
             } transition-all duration-500 ease-in-out`}
           ></div>
