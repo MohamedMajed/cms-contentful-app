@@ -1,12 +1,12 @@
 import Link from "next/link";
 import { draftMode } from "next/headers";
-// import Slider from "./components/slider";
+import { Button } from 'antd';
 import ImageSlider from "./components/slider";
 
 import Date from "./date";
 import CoverImage from "./cover-image";
 import Avatar from "./avatar";
-import MoreStories from "./more-stories";
+import NewArrivals from "./more-stories";
 
 import { getAllCategories } from "@/lib/api";
 import { CMS_NAME, CMS_URL } from "@/lib/constants";
@@ -103,13 +103,15 @@ export default async function Page() {
   const moreCategories = allCategories.slice(1);
 
   const sliderImages = allCategories.map((category) => category.image);
+  const newArrivalsCategory = allCategories.find((category) => category.title === "New Arrivals");
+  console.log('newArrivalsCategory', newArrivalsCategory.slug)
 
   return (
     <div className="container mx-auto px-5">
       <Header />
       <ImageSlider allCategories={allCategories} />
       <TopCategories categories={allCategories} />
-      <MoreStories moreCategories={moreCategories} />
+      <NewArrivals category={newArrivalsCategory} />
     </div>
   );
 }

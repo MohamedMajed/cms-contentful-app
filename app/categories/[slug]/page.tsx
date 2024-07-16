@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { draftMode } from "next/headers";
 
-import MoreStories from "../../more-stories";
+import NewArrivals from "../../more-stories";
 import Avatar from "../../avatar";
 import Date from "../../date";
 import CoverImage from "../../cover-image";
@@ -26,9 +26,7 @@ export default async function CategoryPage({
   console.log('blabla params.slug')
   console.log(params.slug)
   const category = await getCategory(params.slug);
-  const { posts, pagination } = await getAllPostsInCategory(params.slug, isEnabled, {
-    limit: 6,
-  });
+  const { posts, pagination } = await getAllPostsInCategory(params.slug, isEnabled, { limit: 6 });
 
   return (
     <div className="container mx-auto px-5">
@@ -39,18 +37,18 @@ export default async function CategoryPage({
         / {category.name}
       </h2>
       <ul className="list-none mb-20">
-        {posts.map((post) => (
-          <li key={post.id} className="mb-10">
-            <h3 className="text-lg font-bold leading-tight tracking-tighter">
-              <Link href={`/posts/${post.slug}`} className="hover:underline">
-                {post.name}
-              </Link>
-            </h3>
-            <div className="text-sm text-gray-600">
-              <Date dateString={post.date} />
-            </div>
-          </li>
-        ))}
+      {posts.map((post: { id: number; slug: string; name: string; date: string }) => (
+  <li key={post.id} className="mb-10">
+    <h3 className="text-lg font-bold leading-tight tracking-tighter">
+      <Link href={`/categories/${post.slug}`} className="hover:underline">
+        {post.name}
+      </Link>
+    </h3>
+    <div className="text-sm text-gray-600">
+      <Date dateString={post.date} />
+    </div>
+  </li>
+))}
       </ul>
       {pagination.hasNextPage && (
         <div className="flex justify-center mb-20">

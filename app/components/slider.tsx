@@ -1,31 +1,25 @@
-'use client'
+"use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 
 export default function ImageSlider({ allCategories: allCategories }: { allCategories: any[] }): JSX.Element {
   const images = allCategories.map((category) => category.image.url);
 
-  // State to keep track of the current image index
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  // Function to show the previous slide
   const prevSlide = (): void => {
     setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
   };
 
-  // Function to show the next slide
   const nextSlide = (): void => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
 
-  // useEffect hook to handle automatic slide transition
   useEffect(() => {
-    // Start interval for automatic slide change
     const interval = setInterval(() => {
       nextSlide();
     }, 2000);
 
-    // Cleanup the interval on component unmount
     return () => {
       clearInterval(interval);
     };
@@ -55,6 +49,20 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
             } transition-all duration-500 ease-in-out`}
           ></div>
         ))}
+      </div>
+      <div className="flex justify-between mt-4">
+        <button
+          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+          onClick={prevSlide}
+        >
+          Prev
+        </button>
+        <button
+          className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+          onClick={nextSlide}
+        >
+          Next
+        </button>
       </div>
     </div>
   );

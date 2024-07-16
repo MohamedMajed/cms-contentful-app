@@ -90,22 +90,36 @@ export async function getAllPostsInCategory(
   options: { limit: number; page?: number } = { limit: 6 }
 ) {
   const category = await getCategory(categorySlug);
-  const postsQuery = `query {
-    postCollection(where: { categories: { elemMatch: { slug: "${categorySlug}" } } }, preview: ${isEnabled? "true" : "false"}, limit: ${options.limit}, skip: ${options.page? (options.page - 1) * options.limit : 0}) {
-      items {
-        ${POST_GRAPHQL_FIELDS}
+  console.log('asjhdgjah')
+  console.log(category)
+  const postsQuery = `
+    query {
+      categoryCollection(where: { slug: "${categorySlug}" }, limit: 1) {
+        items {
+          postsCollection(limit: ${options.limit}, skip: ${options.page? (options.page - 1) * options.limit : 0}) {
+            items {
+             ... on Post {
+                ${POST_GRAPHQL_FIELDS}
+              }
+            }
+          }
+        }
       }
     }
-  }`;
+  `;
 
   const response = await fetchGraphQL(postsQuery, isEnabled);
-  console.log('blabla');
-  console.log(response);
-  const posts = extractPosts(response);
-
+  console.log('Response:', response);
+  const data = response.data;
+  console.log('response.data:', response.data);
+  console.log(JSON.stringify(response.data, null, 3));
+  const categoryCollection = data.categoryCollection;
+  console.log('Resasdponse:', categoryCollection);
+  const posts = categoryCollection && categoryCollection.items[0].postsCollection.items;
+  console.log('Resasdpoasdjghnse:', posts);
   const pagination = {
     hasNextPage: posts.length === options.limit,
-    nextPage: options.page ? options.page + 1 : 2,
+    nextPage: options.page? options.page + 1 : 2,
   };
   console.log(posts.length)
 
