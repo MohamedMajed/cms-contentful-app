@@ -7,10 +7,6 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
 
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  const prevSlide = (): void => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
-  };
-
   const nextSlide = (): void => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
   };
@@ -50,7 +46,7 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
           ></div>
         ))}
       </div>
-      <div className="flex justify-between mt-4">
+      {/* <div className="flex justify-between mt-4">
         <button
           className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
           onClick={prevSlide}
@@ -63,7 +59,7 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
         >
           Next
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

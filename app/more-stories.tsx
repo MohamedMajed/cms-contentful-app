@@ -4,7 +4,7 @@ import DateComponent from "./date";
 import CoverImage from "./cover-image";
 import { title } from "process";
 
-function PostPreview({
+export function PostPreview({
   name,
   slug,
   description,
@@ -23,12 +23,12 @@ function PostPreview({
     <div className="PostPreview">
       <div className="mb-5 flex">
         <CoverImage title={name} slug={slug} url={thumbnail} />
-        <div className="description ml-4">{description}</div>
+        <div className="description ml-8">{description}</div>
       </div>
       <div className="post-info">
-        <h3>{name}</h3>
+        <p className="price">{name}</p>
         <div className="flex justify-between mb-4">
-          <p className="price">${price}</p>
+          <p>${price}</p>
           <p className="quantity">Quantity: {quantity}</p>
         </div>
       </div>
@@ -39,13 +39,14 @@ function PostPreview({
 
 export default function NewArrivals({ category }: { category: any }) {
   const posts = category?.postsCollection?.items ?? [];
+  console.log('pmwy', posts)
   return (
     <section className="NewArrivals grid grid-cols-1 gap-4">
-      <h2>{category.title}</h2>
+      <div className="title">{category.title}</div>
       {posts.map((post: any) => (
         <div key={post.slug} className="PostPreviewContainer">
           <PostPreview
-            name={post.title}
+            name={post.name}
             slug={post.slug}
             description={post.description}
             thumbnail={post.thumbnail.url}

@@ -38,8 +38,14 @@
   }
   
   .PostPreview .post-info .price {
-    font-size: 18px;
-    font-weight: bold;
+    font-size: 2rem;
+    font-weight: medium;
+    color: #333;
+  }
+
+  .PostPreview .post-info .description {
+    font-size: 2rem;
+    font-weight: small;
     color: #333;
   }
   
@@ -58,6 +64,12 @@
     font-weight: bold;
     margin-bottom: 16px;
   }
+
+  .NewArrivals .title {
+    font-size: 64px;
+    font-weight: bold;
+    margin-bottom: 16px;
+  }
   
   .NewArrivals .grid {
     display: grid;
@@ -71,4 +83,10 @@
   
   .NewArrivals .grid lg\:grid-cols-3 {
     grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  .CategoryPage .title {
+    font-size: 64px;
+    font-weight: bold;
+    margin-bottom: 16px;
   }

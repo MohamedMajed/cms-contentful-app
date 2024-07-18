@@ -39,6 +39,7 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
         Authorization: `Bearer ${
           preview
             ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
@@ -57,7 +58,7 @@ function extractCategory(fetchResponse: any): any {
   return fetchResponse?.data?.categoryCollection?.items?.[0];
 }
 
-function extractCategories(fetchResponse: any): any[] {
+function extractCategories(fetchResponse: any): any[] {  
   return fetchResponse?.data?.categoryCollection?.items;
 }
 

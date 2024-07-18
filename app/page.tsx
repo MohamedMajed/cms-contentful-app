@@ -77,8 +77,8 @@ function TopCategories({
   }[];
 }) {
   return (
-    <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-20 pt-10">
-      {categories.slice(0, 6).map((category) => (
+    <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-20 pt-10">
+      {categories.slice(0, 4).map((category) => (
         <div key={category.slug} className="relative">
           <Link href={`/categories/${category.slug}`}>
             <img
@@ -87,7 +87,7 @@ function TopCategories({
               className="w-full h-full object-cover rounded-lg"
             />
           </Link>
-          <div className="absolute bottom-0 left-0 p-4 text-lg font-bold text-white">
+          <div className="absolute bottom-0 left-0 p-4 text-lg font-bold text-grey">
             {category.title}
           </div>
         </div>
@@ -97,14 +97,11 @@ function TopCategories({
 }
 
 export default async function Page() {
-  const { isEnabled } = draftMode();
+  // const { isEnabled } = draftMode();
   const allCategories = await getAllCategories();
-  const heroPost = allCategories[0];
-  const moreCategories = allCategories.slice(1);
-
-  const sliderImages = allCategories.map((category) => category.image);
+  console.log('pl,whs', allCategories)
   const newArrivalsCategory = allCategories.find((category) => category.title === "New Arrivals");
-  console.log('newArrivalsCategory', newArrivalsCategory.slug)
+  console.log('newArrivalsCategory', newArrivalsCategory.postsCollection)
 
   return (
     <div className="container mx-auto px-5">
