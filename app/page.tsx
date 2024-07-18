@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { draftMode } from "next/headers";
-import { Button } from 'antd';
+// import { Button } from 'antd';
+import Button from '@mui/material/Button';
 import ImageSlider from "./components/slider";
+
 
 import Date from "./date";
 import CoverImage from "./cover-image";
@@ -102,6 +104,8 @@ export default async function Page() {
   console.log('pl,whs', allCategories)
   const newArrivalsCategory = allCategories.find((category) => category.title === "New Arrivals");
   console.log('newArrivalsCategory', newArrivalsCategory.postsCollection)
+  const posts = newArrivalsCategory.postsCollection;
+  console.log('aasdkwwww', posts.items[0].thumbnail)
 
   return (
     <div className="container mx-auto px-5">

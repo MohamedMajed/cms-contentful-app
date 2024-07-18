@@ -45,6 +45,7 @@ export default function NewArrivals({ category }: { category: any }) {
       <div className="title">{category.title}</div>
       {posts.map((post: any) => (
         <div key={post.slug} className="PostPreviewContainer">
+          <Link href={`/posts/${post.slug}`}>
           <PostPreview
             name={post.name}
             slug={post.slug}
@@ -53,6 +54,7 @@ export default function NewArrivals({ category }: { category: any }) {
             price={post.price}
             quantity={post.quantity}
           />
+          </Link>
         </div>
       ))}
     </section>

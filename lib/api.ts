@@ -140,30 +140,28 @@ export async function getAllCategories(): Promise<any[]> {
   return extractCategories(entries);
 }
 
-export async function getPostBySlug(slug: string | null, preview: boolean): Promise<any> {
+export async function getPostBySlug(slug: string | null): Promise<any> {
   const entry = await fetchGraphQL(
     `query {
-      postCollection(where: { slug: "${slug}" }, preview: ${preview ? "true" : "false"}, limit: 1) {
+      postCollection(where: { slug: "${slug}" }, limit: 1) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
       }
-    }`,
-    preview,
+    }`,    
   );
   return extractPost(entry);
 }
 
-export async function getAllPosts(isDraftMode: boolean): Promise<any[]> {
+export async function getAllPosts(): Promise<any[]> {
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_exists: true }, order: name_DESC, preview: ${isDraftMode ? "true" : "false"}) {
+      postCollection(where: { slug_exists: true }, order: name_DESC) {
         items {
           ${POST_GRAPHQL_FIELDS}
         }
       }
-    }`,
-    isDraftMode,
+    }`,    
   );
   return extractPosts(entries);
 }
