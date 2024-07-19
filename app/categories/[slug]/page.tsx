@@ -54,9 +54,9 @@ export default async function CategoryPage({
         <div className="flex justify-center mb-20">
           <Link
             href={`/categories/${params.slug}/${pagination.nextPage}`}
-            className="bg-accent-1 hover:bg-accent-2 text-black font-bold py-2 px-4 rounded hover:underline">
+            className="load-more-btn">
             Load more
-          </Link>
+          </Link>          
         </div>
       )}
     </div>

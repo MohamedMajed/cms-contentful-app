@@ -37,12 +37,13 @@ export function PostPreview({
 }
 
 
-export default function NewArrivals({ category }: { category: any }) {
-  const posts = category?.postsCollection?.items ?? [];
+export default function NewArrivals({ posts }: { posts: any }) {
+  // const posts = category?.postsCollection?.items ?? [];
   console.log('pmwy', posts)
   return (
     <section className="NewArrivals grid grid-cols-1 gap-4">
-      <div className="title">{category.title}</div>
+      {/* <div className="title">{category.title}</div> */}      
+      <div className="title">New Arrivals</div>
       {posts.map((post: any) => (
         <div key={post.slug} className="PostPreviewContainer">
           <Link href={`/posts/${post.slug}`}>

@@ -40,11 +40,10 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
       headers: {
         "Content-Type": "application/json",
         'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate, max-age=0',
-        Authorization: `Bearer ${
-          preview
-            ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
-            : process.env.CONTENTFUL_ACCESS_TOKEN
-        }`,
+        Authorization: `Bearer ${preview
+          ? process.env.CONTENTFUL_PREVIEW_ACCESS_TOKEN
+          : process.env.CONTENTFUL_ACCESS_TOKEN
+          }`,
       },
       body: JSON.stringify({ query }),
       next: { tags: ["posts"] },
@@ -58,7 +57,7 @@ function extractCategory(fetchResponse: any): any {
   return fetchResponse?.data?.categoryCollection?.items?.[0];
 }
 
-function extractCategories(fetchResponse: any): any[] {  
+function extractCategories(fetchResponse: any): any[] {
   return fetchResponse?.data?.categoryCollection?.items;
 }
 
@@ -69,6 +68,7 @@ function extractPost(fetchResponse: any): any {
 }
 
 function extractPosts(fetchResponse: any): any[] {
+  console.log('okmwd;wwaa', fetchResponse?.data?.postCollection?.items)
   return fetchResponse?.data?.postCollection?.items;
 }
 
@@ -97,7 +97,7 @@ export async function getAllPostsInCategory(
     query {
       categoryCollection(where: { slug: "${categorySlug}" }, limit: 1) {
         items {
-          postsCollection(limit: ${options.limit}, skip: ${options.page? (options.page - 1) * options.limit : 0}) {
+          postsCollection(limit: ${options.limit}, skip: ${options.page ? (options.page - 1) * options.limit : 0}) {
             items {
              ... on Post {
                 ${POST_GRAPHQL_FIELDS}
@@ -120,7 +120,7 @@ export async function getAllPostsInCategory(
   console.log('Resasdpoasdjghnse:', posts);
   const pagination = {
     hasNextPage: posts.length === options.limit,
-    nextPage: options.page? options.page + 1 : 2,
+    nextPage: options.page ? options.page + 1 : 2,
   };
   console.log(posts.length)
 
@@ -148,7 +148,7 @@ export async function getPostBySlug(slug: string | null): Promise<any> {
           ${POST_GRAPHQL_FIELDS}
         }
       }
-    }`,    
+    }`,
   );
   return extractPost(entry);
 }
@@ -156,9 +156,9 @@ export async function getPostBySlug(slug: string | null): Promise<any> {
 export async function getAllPosts(): Promise<any[]> {
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_exists: true }, order: name_DESC) {
+      postCollection(where: { slug_exists: true}) {
         items {
-          ${POST_GRAPHQL_FIELDS}
+          ${POST_GRAPHQL_FIELDS}          
         }
       }
     }`,    

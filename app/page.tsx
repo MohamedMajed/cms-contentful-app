@@ -1,18 +1,10 @@
 import Link from "next/link";
-import { draftMode } from "next/headers";
-// import { Button } from 'antd';
 import Button from '@mui/material/Button';
 import ImageSlider from "./components/slider";
-
-
-import Date from "./date";
-import CoverImage from "./cover-image";
-import Avatar from "./avatar";
 import NewArrivals from "./more-stories";
 
-import { getAllCategories } from "@/lib/api";
+import { getAllCategories, getAllPosts } from "@/lib/api";
 import { CMS_NAME, CMS_URL } from "@/lib/constants";
-import Head from "next/head";
 
 function Intro() {
   return (
@@ -40,34 +32,6 @@ function Intro() {
     </section>
   );
 }
-
-function Header() {
-  return (
-    <header className="flex justify-between items-center py-4 bg-gray-100 shadow-md">
-      <nav className="flex items-center">
-        <ul className="flex items-center">
-          <li className="mr-6">
-            <Link href="/" className="text-gray-600 hover:text-gray-900 transition duration-300">Phones</Link>
-          </li>
-          <li className="mr-6">
-            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Clothes</Link>
-          </li>
-          <li className="mr-6">
-            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Deals</Link>
-          </li>
-          <li className="mr-6">
-            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Computers</Link>
-          </li>
-          <li className="mr-6">
-            <Link href="/about" className="text-gray-600 hover:text-gray-900 transition duration-300">Fashion</Link>
-          </li>
-          
-        </ul>
-      </nav>
-    </header>
-  );
-}
-
 
 function TopCategories({
   categories,
@@ -101,18 +65,16 @@ function TopCategories({
 export default async function Page() {
   // const { isEnabled } = draftMode();
   const allCategories = await getAllCategories();
-  console.log('pl,whs', allCategories)
+  const allPosts = await getAllPosts();
+  console.log('pl,m,,asodqzzlll', allPosts)
   const newArrivalsCategory = allCategories.find((category) => category.title === "New Arrivals");
   console.log('newArrivalsCategory', newArrivalsCategory.postsCollection)
-  const posts = newArrivalsCategory.postsCollection;
-  console.log('aasdkwwww', posts.items[0].thumbnail)
 
   return (
-    <div className="container mx-auto px-5">
-      <Header />
+    <div className="mx-auto">      
       <ImageSlider allCategories={allCategories} />
       <TopCategories categories={allCategories} />
-      <NewArrivals category={newArrivalsCategory} />
+      <NewArrivals posts={allPosts} />
     </div>
   );
 }
