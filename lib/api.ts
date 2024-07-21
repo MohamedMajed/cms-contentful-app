@@ -13,6 +13,9 @@ const CATEGORY_GRAPHQL_FIELDS = `
         thumbnail {
           url
         }
+        hoverImage {
+          url
+        }
         description
         price
         quantity
@@ -26,6 +29,9 @@ const POST_GRAPHQL_FIELDS = `
   slug
   thumbnail {
     url
+  }
+  hoverImage {
+          url
   }
   description
   price
@@ -46,13 +52,13 @@ async function fetchGraphQL(query: string, preview = false): Promise<any> {
           }`,
       },
       body: JSON.stringify({ query }),
-      next: { tags: ["posts"] },
+      next: { tags: ["posts"], revalidate: 60 },
     },
   ).then((response) => response.json());
 }
 
 function extractCategory(fetchResponse: any): any {
-  console.log('blabla extractCategory')
+  console.log('blabla extractCatdegory')
   console.log(fetchResponse?.data?.categoryCollection?.items?.[0])
   return fetchResponse?.data?.categoryCollection?.items?.[0];
 }
@@ -156,12 +162,12 @@ export async function getPostBySlug(slug: string | null): Promise<any> {
 export async function getAllPosts(): Promise<any[]> {
   const entries = await fetchGraphQL(
     `query {
-      postCollection(where: { slug_exists: true}) {
+      postCollection(order: sys_firstPublishedAt_DESC, where: { slug_exists: true}) {
         items {
           ${POST_GRAPHQL_FIELDS}          
         }
       }
-    }`,    
+    }`,
   );
   return extractPosts(entries);
 }

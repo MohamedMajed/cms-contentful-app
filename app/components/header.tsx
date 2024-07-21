@@ -4,8 +4,8 @@ import { HiOutlineHeart, HiOutlineSearch, HiOutlineUser, HiOutlineShoppingCart }
 
 export default function Header() {
     return (
-      <header className="bg-white border-b border-gray-200">
-        <div className="container mx-auto flex flex-col sm:flex-row justify-between items-center py-4 px-6">
+      <header className="bg-white">
+        <div className="mx-auto flex flex-col sm:flex-row justify-between items-center py-6 px-6 py-6">
           <div className="flex items-center mb-4 sm:mb-0">
           {/* <a href="/" className="text-gray-800" style={{ fontSize: 36, fontFamily: 'Open Sans' }}>kalles</a> */}
           <a href="/" className="text-xl font-extrabold text-gray-800" style={{ fontSize: 36 }}>kalles</a>

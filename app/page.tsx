@@ -1,7 +1,7 @@
 import Link from "next/link";
 import Button from '@mui/material/Button';
 import ImageSlider from "./components/slider";
-import NewArrivals from "./more-stories";
+import NewArrivals from "./new-arrivals";
 
 import { getAllCategories, getAllPosts } from "@/lib/api";
 import { CMS_NAME, CMS_URL } from "@/lib/constants";
@@ -43,18 +43,29 @@ function TopCategories({
   }[];
 }) {
   return (
-    <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-20 pt-10">
+    <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-20 pt-20 px-20">
       {categories.slice(0, 4).map((category) => (
         <div key={category.slug} className="relative">
           <Link href={`/categories/${category.slug}`}>
-            <img
-              src={category.image.url}
-              alt={category.title}
-              className="w-full h-full object-cover rounded-lg"
-            />
+            <div className="overflow-hidden"> {/* Add a wrapper div */}
+              <img
+                src={category.image.url}
+                alt={category.title}
+                className="w-full h-full object-cover rounded-lg transition duration-300 ease-in-out hover:scale-110 hover:rounded-lg"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </div>
           </Link>
-          <div className="absolute bottom-0 left-0 p-4 text-lg font-bold text-grey">
-            {category.title}
+          <div className="absolute flex justify-center items-center left-1/2 bottom-1 -translate-x-1/2 -translate-y-1/2 shadow-md">
+            <div className="bg-white p-2">
+              <div className="text-base font-semibold text-grey px-4">
+                {category.title}
+              </div>
+            </div>
           </div>
         </div>
       ))}
@@ -71,7 +82,7 @@ export default async function Page() {
   console.log('newArrivalsCategory', newArrivalsCategory.postsCollection)
 
   return (
-    <div className="mx-auto">      
+    <div className="mx-auto">
       <ImageSlider allCategories={allCategories} />
       <TopCategories categories={allCategories} />
       <NewArrivals posts={allPosts} />

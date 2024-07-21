@@ -55,13 +55,13 @@
   }
   
   /* Add styles for NewArrivals component */
-  .NewArrivals {
-    margin-bottom: 32px;
-  }
+  /* .NewArrivals {
+    margin-bottom: 64px;
+  } */
   
   .NewArrivals h2 {
-    font-size: 36px;
-    font-weight: bold;
+    font-size: 24px;
+    font-weight: small;
     margin-bottom: 16px;
   }
 
@@ -71,19 +71,6 @@
     margin-bottom: 16px;
   }
   
-  .NewArrivals .grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  
-  .NewArrivals .grid md\:grid-cols-2 {
-    grid-template-columns: 1fr 1fr;
-  }
-  
-  .NewArrivals .grid lg\:grid-cols-3 {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
 
   .CategoryPage .title {
     font-size: 64px;
@@ -100,14 +87,19 @@
     font-weight: bold;
     border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out; /* Add transition */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out;
   }
   
   .load-more-btn:hover {
-    background-color: #000; /* Fill the button with black color on hover */
-    color: #fff; /* Change text color to white on hover */
+    background-color: #000;
+    color: #fff;
   }
   
   .load-more-btn:hover:hover {
     background-size: 100% 100%;
+  }
+
+  .custom-header {
+    color: grey;
+    font-family: Roboto;
   }

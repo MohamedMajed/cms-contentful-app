@@ -1,5 +1,4 @@
-import { draftMode } from "next/headers";
-import { getAllCategories, getPostAndMorePosts, getPostBySlug, getAllPostsInCategory, getAllPosts } from "@/lib/api";
+import { getPostBySlug, getAllPosts } from "@/lib/api";
 
 export async function generateStaticParams() {
     const allPosts = await getAllPosts();
