@@ -15,7 +15,7 @@ export default function ImageSlider({ allCategories: allCategories }: { allCateg
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 2000);
+    }, 4000);
 
     return () => {
       clearInterval(interval);

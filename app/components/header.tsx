@@ -50,7 +50,7 @@ export default function Header() {
               <HiOutlineHeart />
             </span>
             <span className="text-2xl text-gray-800 hover:text-blue-300 hidden sm:inline-block">
-              <HiOutlineShoppingCart />
+              <HiOutlineShoppingCart size={24} />
             </span>
           </div>
         </div>
